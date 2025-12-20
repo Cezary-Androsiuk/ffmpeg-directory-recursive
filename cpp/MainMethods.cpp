@@ -75,7 +75,7 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
         printf("ffmpegRec :1 :2 :3\n");
         printf("  :1 - path to execute ffmpeg in it\n");
         printf("  :2 - extensions to look for, can be separated by ,/\\?;+\n");
-        printf("  :3 - action when file is already H265 [skip/copy/move/test/force]\n");
+        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional) default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
     }
 #else
     exitValue = argsValidConst(argc, argv, directory, extensions, skipAction);
@@ -86,7 +86,7 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
         printf("ffmpegRec :1 :2 :3\n");
         printf("  :1 - path to execute ffmpeg in it\n");
         printf("  :2 - extensions to look for, can be separated by ,/\\?;+\n");
-        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional)\n");
+        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional) default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
     }
 #endif
     return exitValue;
