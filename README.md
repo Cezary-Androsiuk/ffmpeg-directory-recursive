@@ -132,7 +132,13 @@ In this example, all files in the directory will be forced to scale to 1920x1080
 ## Screenshots
 
 ### Input Files:
-![inFiles](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/inFiles.png "inFiles") 
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/inFiles.png" width="290px" alt="inFiles">
+    </td>
+  </tr>
+</table>
 
 ### Command Prompt Output
 ![display1](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/display1.png "display1") 
