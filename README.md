@@ -10,8 +10,18 @@
 * **Smart Detection:** Can skip or handle files that are already encoded (e.g., H.265).
 
 ### Purpose
-Downloaded or recorded videos often are encoded with h.264. On todays standard those videos takes unnesessary much space on the drive. In response for that you could reencode each video to h.265 using `ffmpeg -i video.mp4 -c:v libx265 -vtag hvc1 smaller_size_video.mp4`. In the end of the day you will reach the goal, but manually typing it for each video is tedious. Thats the reason this program was created, to simplify that task by calling one command `ffmpegRec video_folder mp4` to convert thousands of files that could lay in this folder.
+Downloaded and recorded videos are often encoded in **H.264**. By modern standards, these files consume significantly more disk space than necessary.
 
+While you could manually re-encode a single video to the more efficient **H.265** format using:
+`ffmpeg -i video.mp4 -c:v libx265 -vtag hvc1 smaller_size_video.mp4`
+
+...doing this one by one is tedious and time-consuming.
+
+**ffmpegRec** was created to automate this workflow. It simplifies the task to a single command:
+`ffmpegRec video_folder mp4`
+allowing you to batch-convert thousands of files residing in that folder and its subdirectories efficiently.
+
+## More
 This is an advanced successor to [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory). Unlike its predecessor, this tool handles **recursive directory structures**. It creates a parallel output directory that mirrors the input structure, filling it with processed files while keeping the original files untouched.
 Check out [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory) for more screenshots!
 
