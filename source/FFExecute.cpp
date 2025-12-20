@@ -16,6 +16,7 @@
 #include "BetterConversion.hpp"
 // #include "TemporaryRename.hpp"
 #include "FFmpegCommand.hpp"
+#include "CalculatorETA.hpp"
 
 int FFExecute::m_performedFFmpegs = 0;
 int FFExecute::m_correctlyPerformedFFmpegs = 0;
@@ -375,7 +376,9 @@ bool FFExecute::_ffmpegPartForStandard(cpath inFile, cpath outFile)
     HandlePipeOutput::addToFFOFile("\n\n\n\n\n\nFFmpeg output:\n");
     HandlePipeOutput::addToFFOFile("Command: " + BetterConversion::toString(command) + "\n\n");
 
+    
     int duration = HandlePipeOutput::getInterpretationOfTime(FFTester::getStrDuration());
+    CalculatorETA::reset(duration);
     HandlePipeOutput::setStringDuration(HandlePipeOutput::splitNumberByThousands(duration, ' '));
     HandlePipeOutput::printProgress(0, HandlePipeOutput::splitNumberByThousands(duration, ' '));
 

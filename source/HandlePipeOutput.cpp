@@ -13,8 +13,10 @@
 
 #include "ErrorInfo.hpp"
 #include "BetterConversion.hpp"
+#include "CalculatorETA.hpp"
 
-std::string HandlePipeOutput::m_stringDuration;
+std::string HandlePipeOutput::m_stringTotalDuration;
+int HandlePipeOutput::m_totalDuration = 0;
 std::ofstream HandlePipeOutput::m_ffOFile;
 fs::path HandlePipeOutput::m_ffOFileDirectory;
 fs::path HandlePipeOutput::m_ffOFilePath;
@@ -155,7 +157,7 @@ void HandlePipeOutput::printOutputToCMD(cstr line)
     
     // printf("\n\n\n\n""line: %s\n" "strtime: %s\n" "time: %d\n", line.c_str(), strtime.c_str(), timePassed);
 
-    HandlePipeOutput::printProgress(timePassed, m_stringDuration);
+    HandlePipeOutput::printProgress(timePassed, m_stringTotalDuration);
 }
 
 
@@ -190,11 +192,20 @@ void HandlePipeOutput::addTextToFFOFile(cstr line)
 
 void HandlePipeOutput::printProgress(int progress, cstr duration)
 {
-    // create format __23/0123, or _123/0123 ...
-    HandlePipeOutput::clearLine(15+2 + duration.size() * 2 + 4);
-    str strProgress = HandlePipeOutput::numberThatOccupiesGivenSpace(progress, duration.size());
-    printf("    progress:  %s / %s", strProgress.c_str(), duration.c_str());
+    float percentageProgress = (float)progress / m_totalDuration * 100;
 
+
+    // create format __23/0123, or _123/0123 ...
+    HandlePipeOutput::clearLine(14+6+1+13 + 2 + duration.size() * 2 + 10+8+2 + 4);
+    str strProgress = HandlePipeOutput::numberThatOccupiesGivenSpace(progress, duration.size());
++
+    printf("    Progress: %6.2f%%  |  Frames: %s / %s  |  ETA: %s  ", 
+        percentageProgress, 
+        strProgress.c_str(), 
+        duration.c_str(),
+        CalculatorETA::update(progress).c_str());
+
+    
     fflush(stdout);
 }
 
@@ -428,7 +439,17 @@ void HandlePipeOutput::setFFOFileDirectory(cpath ffOFileDirectory)
 
 void HandlePipeOutput::setStringDuration(cstr stringDuration)
 {
-    m_stringDuration = stringDuration;
+    m_stringTotalDuration = stringDuration;
+    
+    std::string noSpacesDuration;
+    noSpacesDuration.reserve(stringDuration.size());
+    for(const char &c : stringDuration)
+    {
+        if(c != ' ')
+            noSpacesDuration += c;
+    }
+
+    m_totalDuration = myStoll(noSpacesDuration);
 }
 
 void HandlePipeOutput::setVersionToSave(const char *versionToSave)

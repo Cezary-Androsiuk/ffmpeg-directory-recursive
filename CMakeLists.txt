@@ -21,6 +21,7 @@ set(SOURCES
     source/ErrorInfo.cpp
     source/TestPipe.cpp
     source/WinConsoleHandler.cpp
+    source/CalculatorETA.cpp
 )
 
 set(HEADERS
@@ -37,6 +38,7 @@ set(HEADERS
     source/TestPipe.hpp
     source/WinConsoleHandler.hpp
     source/enums/SkipAction.hpp
+    source/CalculatorETA.hpp
 )
 
 add_executable(ffmpegRec ${SOURCES} ${HEADERS})
