@@ -144,19 +144,13 @@ In this example, all files in the directory will be forced to scale to 1920x1080
 ![display1](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/display1.png "display1") 
 
 ### Output Files:
-<table>
-  <tr>
-    <td align="center">
-      <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles1.png" width="190px" alt="outFiles 1">
-    </td>
-    <td align="center">
-      <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles2.png" width="290px" alt="outFiles 2">
-    </td>
-    <td align="center">
-      <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles3.png" width="290px" alt="outFiles 3">
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles1.png" width="190" />
+  &nbsp;
+  <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles2.png" width="290" />
+  &nbsp;
+  <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles3.png" width="290" />
+</p>
 
 
 ### Invalid arguments
