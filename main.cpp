@@ -35,7 +35,7 @@
 
 #define IN_DEBUG false
 
-#define VERSION "1.5.0"
+#define VERSION "1.5.1"
 const char *versionLine = "FFmpegRec version " VERSION "\n";
 
 int main(int argc, const char **argv)
@@ -57,8 +57,6 @@ int main(int argc, const char **argv)
     printf("Selected directory: %ls\n", inDirectory.wstring().c_str());
     printf("FFmpeg core: \"%S\"\n", FFmpegCommand::getCore());
 
-    HandlePipeOutput::setFFOFileDirectory(inDirectory);
-
     // create list of files
     vpath listOfFiles = ListMaker::listOfFiles(inDirectory, extensions); // listOfFiles method also prints files
     
@@ -78,6 +76,12 @@ int main(int argc, const char **argv)
         OFCDirectory = createOCFDirectory(inDirectory, IN_DEBUG);
         if(OFCDirectory == fs::path()) // messages are handle in 'createOCFDirectory' function
             return 1;
+            
+        HandlePipeOutput::setFFOFileDirectory(outDirectory);
+    }
+    else
+    {
+        HandlePipeOutput::setFFOFileDirectory(inDirectory);
     }
 
     FFExecute::setTotalFFmpegsToPerform(listOfFiles.size());

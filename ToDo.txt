@@ -20,6 +20,4 @@
 
 6. fix Ctrl+C not deleting files
 
-7. move FFOFile to (maybe all - not only created by current compression (in case if prevoius execution fail or something) ) ffmpeg directory
-
 8. separate currently compressed FFOFile output from the rest to the temporary one and after finished compression of the file, trim data from the temporary and move it to main FFOFile (main but in range of one compression)
