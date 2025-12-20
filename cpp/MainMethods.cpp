@@ -85,15 +85,25 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
     if(!exitValue)
     {
         fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %S\n" COLOR_RESET, lastError.c_str());
-        fprintf(stderr, "Expected three arguments!\n");
-        printf("ffmpegRec :1 :2 :3 :4\n");
-        printf("  :1 - path to execute ffmpeg in it\n");
-        printf("  :2 - extensions to look for, can be separated by ,/\\?;+\n");
-        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional)\n"
-               "       default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
-        printf("  :4 - ffmpeg core command (optional)\n"
-               "       default: \"%S\"\n"
-               "       NOTE: use brackets \"\" with this argument\n", FFmpegCommand::getCore());
+        fprintf(stderr, "Expected at least two arguments!\n");
+        printf("\n\n");
+        printf("Usage:\n");
+        printf("ffmpegRec <path> <extensions> [action] [command]\n");
+        printf("\n");
+        printf("Arguments:\n");
+        printf("\t""<path>          The root directory containing files to process.\n");
+        printf("\t\n");
+        printf("\t""<extensions>    File extensions to look for. Multiple extensions can be separated by ,/\\?;+" "\n"
+               "\t""                Example: mk4,mkv,avi\n");
+        printf("\t\n");
+        printf("\t""[action]        (Optional) Behavior when a file is already in the target codec (H.265).\n"
+               "\t""                Options: skip, copy, move, test, force\n"
+               "\t""                Default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
+        printf("\t\n");
+        printf("\t""[command]       (Optional) The FFmpeg arguments to apply. Use quotes \"\" around the command.\n"
+               "\t""                Default: \"%S\"\n", FFmpegCommand::getCore());
+        printf("\t\n");
+
     }
 #endif
     return exitValue;

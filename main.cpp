@@ -35,7 +35,7 @@
 
 #define IN_DEBUG false
 
-#define VERSION "1.5.1"
+#define VERSION "1.5.2"
 const char *versionLine = "FFmpegRec version " VERSION "\n";
 
 int main(int argc, const char **argv)
