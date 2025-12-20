@@ -72,7 +72,7 @@ SkipAction Utils::handleInputSkipAction(str input)
 
 bool Utils::handleArgs(int argc, const char **argv, void *arguments[])
 {
-    // very dangerous function... but, i kinda like this risk ;)
+    // very dangerous function... but, i kinda like this risk :)
     
     fs::path *directory = static_cast<fs::path *>(arguments[0]);
     vstr *extensions = static_cast<vstr *>(arguments[1]);
@@ -80,20 +80,7 @@ bool Utils::handleArgs(int argc, const char **argv, void *arguments[])
 
     bool exitValue;
 
-#if DYNAMIC_ARGUMENTS_COUNT
-    exitValue = argsValidDynamic(argc, argv, directory, extensions, skipAction);
-    if(!exitValue)
-    {
-        fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %s\n" COLOR_RESET, lastError.c_str());
-        fprintf(stderr, "Expected none, one, two or three arguments!\n");
-        printf("ffmpegRec :1 :2 :3\n");
-        printf("  :1 - path to execute ffmpeg in it\n");
-        printf("  :2 - extensions to look for, can be separated by ,/\\?;+\n");
-        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional)\n"
-               "       default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
-    }
-#else
-    exitValue = argsValidFixed(argc, argv, directory, extensions, skipAction);
+    exitValue = argsValid(argc, argv, directory, extensions, skipAction);
     if(!exitValue)
     {
         fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %S\n" COLOR_RESET, lastError.c_str());
@@ -117,11 +104,10 @@ bool Utils::handleArgs(int argc, const char **argv, void *arguments[])
         printf("\t\n");
 
     }
-#endif
     return exitValue;
 }
 
-bool Utils::argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
+bool Utils::argsValid(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
 {
     FUNC_START
     if(argc < 3)
@@ -178,72 +164,6 @@ bool Utils::argsValidFixed(int argc, const char **argv, fs::path *const director
     return true;
 }
 
-bool Utils::argsValidDynamic(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
-{
-    FUNC_START
-
-    fs::path givenDirectory;
-    vstr givenExtensions;
-    SkipAction givenSkipAction;
-
-    switch (argc)
-    {
-    case 1: // none args
-        givenDirectory = DEFAULT_PATH;
-        givenExtensions = DEFAULT_EXTENSIONS;
-        givenSkipAction = DEFAULT_SKIP_ACTION;
-        break;
-
-    case 2: // one argument
-        givenDirectory = argv[1];
-        givenExtensions = DEFAULT_EXTENSIONS;
-        givenSkipAction = DEFAULT_SKIP_ACTION;
-        break;
-
-    case 3: // two arguments
-        givenDirectory = argv[1];
-        givenExtensions = splitExtensionsInput( str(argv[2]) );
-        givenSkipAction = DEFAULT_SKIP_ACTION;
-        break;
-
-    case 4: // three arguments
-    default: // more argumens
-        givenDirectory = argv[1];
-        givenExtensions = splitExtensionsInput( str(argv[2]) );
-        givenSkipAction = handleInputSkipAction( str(argv[3]) );
-        break;
-    }
-    
-    if(!fs::exists( givenDirectory ))
-    {
-        lastError = L"File " + givenDirectory.wstring() + L" not exist!";
-        return false;
-    }
-
-    if(!fs::is_directory( givenDirectory ))
-    {
-        lastError = L"File " + givenDirectory.wstring() + L" is not a directory!";
-        return false;
-    }
-
-    if(givenSkipAction == SkipAction::None)
-    {
-        // don't use default to not force user to stop algorithm (for example if he spell type wrong)
-        lastError = L"Given argument '" + BetterConversion::toWideString( argv[3] ) + L"' not match possible options!";
-        return false;
-    }
-
-    if(directory != nullptr)
-        *directory = fs::absolute( givenDirectory );
-
-    if(extensions != nullptr)
-        *extensions = givenExtensions;
-
-    if(skipAction != nullptr)
-        *skipAction = givenSkipAction;
-
-    return true;
-}
 
 bool Utils::isDirectoryEmpty(fs::path directory)
 {

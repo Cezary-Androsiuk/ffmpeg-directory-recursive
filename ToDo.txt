@@ -16,8 +16,6 @@
     - start a loop that refreshes every x seconds and checks if inDirectory exist
     - if directory suddenly appear wait y seconds, remove previous outFile (if exist) and retry the same file compression that failed
 
-4. remove old flexible argument function and add new with extensions mp4+mkv+m4a+mov+avi
-
 8. separate currently compressed FFOFile output from the rest to the temporary one and after finished compression of the file, trim data from the temporary and move it to main FFOFile (main but in range of one compression)
 
 9. fix compressing FFOFile - now is even larger thanks to the new pipe handling method (-progress flag)

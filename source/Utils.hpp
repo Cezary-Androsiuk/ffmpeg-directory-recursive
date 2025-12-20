@@ -20,9 +20,6 @@ typedef std::vector<fs::path> vpath;
 extern wstr lastError;
 extern const char possibleSeparators[];
 
-// keep as false ore write new code in handleArgs() :)
-#define DYNAMIC_ARGUMENTS_COUNT false
-
 #define FUNC_START {lastError.clear();}
 
 #define DEFAULT_PATH fs::current_path()
@@ -43,8 +40,7 @@ public:
     static void stringTolower(str &string);
     static SkipAction handleInputSkipAction(str input);
     static bool handleArgs(int argc, const char **argv, void *arguments[]);
-    static bool argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
-    static bool argsValidDynamic(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
+    static bool argsValid(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
     
     static bool isDirectoryEmpty(fs::path directory);
     static bool createDirectoryIfValid(fs::path outDirectory);
