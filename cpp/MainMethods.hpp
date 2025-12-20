@@ -27,14 +27,14 @@ typedef std::vector<fs::path> vpath;
 extern wstr lastError;
 extern const char possibleSeparators[];
 
-
-#define FLEXIBLE_ARGUMENTS false
+// keep as false ore write new code in handleArgs() :)
+#define DYNAMIC_ARGUMENTS_COUNT false
 
 #define FUNC_START {lastError.clear();}
 
 #define DEFAULT_PATH fs::current_path()
 #define DEFAULT_EXTENSIONS {"mkv", "mp4"}
-#define DEFAULT_SKIP_ACTION SkipAction::Skip
+#define DEFAULT_SKIP_ACTION SkipAction::Force
 
 #define COLOR_RESET   "\033[0m"
 #define COLOR_RED     "\033[31m"
@@ -49,8 +49,8 @@ vstr splitExtensionsInput(str input);
 void stringTolower(str &string);
 SkipAction handleInputSkipAction(str input);
 bool handleArgs(int argc, const char **argv, void *arguments[]);
-bool argsValidConst(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
-bool argsValidFlexible(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
+bool argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
+bool argsValidDynamic(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
 
 bool isDirectoryEmpty(fs::path directory);
 bool createDirectoryIfValid(fs::path outDirectory);

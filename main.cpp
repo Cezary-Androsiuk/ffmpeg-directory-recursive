@@ -9,6 +9,7 @@
 #include "cpp/ListMaker.hpp"
 #include "cpp/enums/SkipAction.hpp"
 #include "cpp/WinConsoleHandler.hpp"
+#include "cpp/FFmpegCommand.hpp"
 
 // locate files recursive
 
@@ -34,7 +35,7 @@
 
 #define IN_DEBUG false
 
-#define VERSION "1.4.2"
+#define VERSION "1.5.0"
 const char *versionLine = "FFmpegRec version " VERSION "\n";
 
 int main(int argc, const char **argv)
@@ -54,6 +55,8 @@ int main(int argc, const char **argv)
 
 
     printf("Selected directory: %ls\n", inDirectory.wstring().c_str());
+    printf("FFmpeg core: \"%S\"\n", FFmpegCommand::getCore());
+
     HandlePipeOutput::setFFOFileDirectory(inDirectory);
 
     // create list of files

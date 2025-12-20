@@ -1,5 +1,7 @@
 #include "FFExecute.hpp"
 
+#include "FFmpegCommand.hpp"
+
 int FFExecute::m_performedFFmpegs = 0;
 int FFExecute::m_correctlyPerformedFFmpegs = 0;
 int FFExecute::m_failedFFmpegs = 0;
@@ -353,7 +355,7 @@ bool FFExecute::_ffprobePartForStandard(cpath inFile, cpath outFile)
 
 bool FFExecute::_ffmpegPartForStandard(cpath inFile, cpath outFile)
 {
-    std::wstring command = FFMPEG_COMMAND(inFile.wstring(), outFile.wstring());
+    const std::wstring command = FFmpegCommand::get(inFile.wstring(), outFile.wstring());
 
     HandlePipeOutput::addToFFOFile("\n\n\n\n\n\nFFmpeg output:\n");
     HandlePipeOutput::addToFFOFile("Command: " + toString(command) + "\n\n");

@@ -1,5 +1,7 @@
 #include "MainMethods.hpp"
 
+#include "FFmpegCommand.hpp"
+
 wstr lastError;
 const char possibleSeparators[] = {',', '/', '\\', /*'|', */';', '+', '?'};
 
@@ -66,8 +68,8 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
 
     bool exitValue;
 
-#if FLEXIBLE_ARGUMENTS
-    exitValue = argsValidFlexible(argc, argv, directory, extensions, skipAction);
+#if DYNAMIC_ARGUMENTS_COUNT
+    exitValue = argsValidDynamic(argc, argv, directory, extensions, skipAction);
     if(!exitValue)
     {
         fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %s\n" COLOR_RESET, lastError.c_str());
@@ -75,24 +77,29 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
         printf("ffmpegRec :1 :2 :3\n");
         printf("  :1 - path to execute ffmpeg in it\n");
         printf("  :2 - extensions to look for, can be separated by ,/\\?;+\n");
-        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional) default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
+        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional)\n"
+               "       default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
     }
 #else
-    exitValue = argsValidConst(argc, argv, directory, extensions, skipAction);
+    exitValue = argsValidFixed(argc, argv, directory, extensions, skipAction);
     if(!exitValue)
     {
         fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %S\n" COLOR_RESET, lastError.c_str());
         fprintf(stderr, "Expected three arguments!\n");
-        printf("ffmpegRec :1 :2 :3\n");
+        printf("ffmpegRec :1 :2 :3 :4\n");
         printf("  :1 - path to execute ffmpeg in it\n");
         printf("  :2 - extensions to look for, can be separated by ,/\\?;+\n");
-        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional) default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
+        printf("  :3 - action when file is already H265 [skip/copy/move/test/force] (optional)\n"
+               "       default: %s\n", skipActionString[DEFAULT_SKIP_ACTION]);
+        printf("  :4 - ffmpeg core command (optional)\n"
+               "       default: \"%S\"\n"
+               "       NOTE: use brackets \"\" with this argument\n", FFmpegCommand::getCore());
     }
 #endif
     return exitValue;
 }
 
-bool argsValidConst(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
+bool argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
 {
     FUNC_START
     if(argc < 3)
@@ -101,13 +108,9 @@ bool argsValidConst(int argc, const char **argv, fs::path *const directory, vstr
         return false;
     }
 
+
     fs::path givenDirectory = argv[1];
     vstr givenExtensions = splitExtensionsInput( str(argv[2]) );
-    SkipAction givenSkipAction;
-    if(argc < 4) // SkipAction was not given
-        givenSkipAction = DEFAULT_SKIP_ACTION;
-    else // something was given as the fourth argument
-        givenSkipAction = handleInputSkipAction( str(argv[3]) ); 
     
     if(!fs::exists( givenDirectory ))
     {
@@ -121,6 +124,13 @@ bool argsValidConst(int argc, const char **argv, fs::path *const directory, vstr
         return false;
     }
 
+
+    SkipAction givenSkipAction;
+    if(argc < 4) // SkipAction was not given
+        givenSkipAction = DEFAULT_SKIP_ACTION;
+    else // something was given as the fourth argument
+        givenSkipAction = handleInputSkipAction( str(argv[3]) ); 
+
     if(givenSkipAction == SkipAction::None)
     {
         // don't use default to not force user to stop algorithm (for example if he spell type wrong)
@@ -128,6 +138,11 @@ bool argsValidConst(int argc, const char **argv, fs::path *const directory, vstr
         return false;
     }
 
+
+    if(argc >= 5)
+    {
+        FFmpegCommand::setCore( toWideString(argv[4]) );
+    }
     
     if(directory != nullptr)
         *directory = fs::absolute( givenDirectory );
@@ -141,7 +156,7 @@ bool argsValidConst(int argc, const char **argv, fs::path *const directory, vstr
     return true;
 }
 
-bool argsValidFlexible(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
+bool argsValidDynamic(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
 {
     FUNC_START
 
