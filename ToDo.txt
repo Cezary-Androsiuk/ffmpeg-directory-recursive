@@ -30,3 +30,6 @@
 11. after 100% correct ("In meantime, no other errors occured") execution check if in source directory any files are left
    - if no (is empty or only folders) then delete it recursively
 12. decide what to do with finished source files folder and stick with it - deleting it by hand is repeatable, but leaving it for user is also good idea (he will by default move them to trash instead of hard deleting)
+
+13. output file extension can be also added as an argument (6th at this point), now by default is mp4
+   - in addition, if user sets argument as "", then output extension will match input file extension
