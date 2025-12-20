@@ -1,19 +1,11 @@
 #ifndef HANDLE_PIPE_OUTPUT_HPP
 #define HANDLE_PIPE_OUTPUT_HPP
 
-#include <cstdio>
 #include <string>
-#include <sstream> // for getInterpretationOfTime
-#include <fstream>
-#include <filesystem>
 #include <vector>
-#include <chrono>
-#include <random>
+#include <filesystem>
 #include <queue> // for splitSpamLine
-#include <cctype> // for cleanFFOFile
-
-#include "OtherError.hpp"
-#include "BetterConversion.hpp"
+#include <fstream>
 
 namespace fs = std::filesystem;
 

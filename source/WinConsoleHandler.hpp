@@ -1,7 +1,6 @@
 #ifndef WIN_CONSOLE_HANDLER_HPP
 #define WIN_CONSOLE_HANDLER_HPP
 
-#include <cstdio>
 #include <windows.h>
 
 class WinConsoleHandler

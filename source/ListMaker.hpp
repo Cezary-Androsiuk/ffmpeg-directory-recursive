@@ -1,7 +1,6 @@
 #ifndef LIST_MAKER_HPP
 #define LIST_MAKER_HPP
 
-#include <cstdio>
 #include <string>
 #include <vector>
 #include <filesystem>

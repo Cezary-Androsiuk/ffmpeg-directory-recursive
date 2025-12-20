@@ -1,5 +1,10 @@
 #include "ChangeFileDate.hpp"
 
+#include <cstdio>
+#include <string>
+#include <windows.h>
+#include <filesystem>
+
 void (*ChangeFileDate::m_addTextToFFOFile)(cstr) = nullptr;
 
 void ChangeFileDate::ownFromFileTimeToSystemTime(

@@ -1,5 +1,10 @@
 #include "TestPipe.hpp"
 
+#include <cstdio>
+#include <string>
+#include <filesystem>
+#include <iostream>
+
 void (*TestPipe::m_addTextToFFOFile)(cstr);
 
 void TestPipe::handleOutput(cstr line)

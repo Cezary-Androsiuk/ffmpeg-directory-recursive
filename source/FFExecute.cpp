@@ -1,5 +1,20 @@
 #include "FFExecute.hpp"
 
+#include <cstdio>
+#include <string>
+#include <ctime>
+#include <fstream>
+#include <filesystem>
+
+#include "FFTester.hpp"
+#include "ErrorInfo.hpp"
+#include "ChangeFileDate.hpp"
+#include "TestPipe.hpp"
+#include "enums/SkipAction.hpp"
+#include "WinConsoleHandler.hpp"
+#include "HandlePipeOutput.hpp"
+#include "BetterConversion.hpp"
+// #include "TemporaryRename.hpp"
 #include "FFmpegCommand.hpp"
 
 int FFExecute::m_performedFFmpegs = 0;
@@ -155,7 +170,7 @@ void FFExecute::moveDateOfFile(cpath from, cpath to)
     {
         fprintf(stderr, "    Changing date of the file " COLOR_RED "failed" COLOR_RESET "\n");
         HandlePipeOutput::addToFFOFile("    Changing date of the file failed");
-        OtherError::addError(L"Changing date of the file failed", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"Changing date of the file failed", __PRETTY_FUNCTION__);
     }
 }
 
@@ -165,7 +180,7 @@ void FFExecute::moveCorrectlyFinishedFile(cpath from, cpath to)
     {
         fprintf(stderr, "    " COLOR_RED "Moving finished file failed" COLOR_RESET "! Source file not exist '%s'\n", from.string().c_str());
         HandlePipeOutput::addToFFOFile("    Moving finished file failed! Source file not exist '" + from.string() + "'");
-        OtherError::addError(L"Moving finished file failed - Source file not exist '" + from.wstring() + L"'", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"Moving finished file failed - Source file not exist '" + from.wstring() + L"'", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -173,7 +188,7 @@ void FFExecute::moveCorrectlyFinishedFile(cpath from, cpath to)
     {
         fprintf(stderr, "    " COLOR_RED "Moving finished file failed" COLOR_RESET "! Output file already exist '%s'\n", to.string().c_str());
         HandlePipeOutput::addToFFOFile("    Moving finished file failed! Output file already exist '" + to.string() + "'");
-        OtherError::addError(L"Moving finished file failed - Output file already exist '" + to.wstring() + L"'", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"Moving finished file failed - Output file already exist '" + to.wstring() + L"'", __PRETTY_FUNCTION__);
         return;
     }
 
@@ -185,7 +200,7 @@ void FFExecute::moveCorrectlyFinishedFile(cpath from, cpath to)
     {
         fprintf(stderr, "    Moving finished file " COLOR_RED "failed" COLOR_RESET ": %s\n", e.what());
         HandlePipeOutput::addToFFOFile("    Moving finished file failed: " + str( e.what() ));
-        OtherError::addError(L"Moving finished file from: '" + from.wstring() + L"', to: '" + to.wstring() + L"' failed", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"Moving finished file from: '" + from.wstring() + L"', to: '" + to.wstring() + L"' failed", __PRETTY_FUNCTION__);
     }
 }
 
@@ -358,7 +373,7 @@ bool FFExecute::_ffmpegPartForStandard(cpath inFile, cpath outFile)
     const std::wstring command = FFmpegCommand::get(inFile.wstring(), outFile.wstring());
 
     HandlePipeOutput::addToFFOFile("\n\n\n\n\n\nFFmpeg output:\n");
-    HandlePipeOutput::addToFFOFile("Command: " + toString(command) + "\n\n");
+    HandlePipeOutput::addToFFOFile("Command: " + BetterConversion::toString(command) + "\n\n");
 
     int duration = HandlePipeOutput::getInterpretationOfTime(FFTester::getStrDuration());
     HandlePipeOutput::setStringDuration(HandlePipeOutput::splitNumberByThousands(duration, ' '));

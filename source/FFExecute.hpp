@@ -1,21 +1,10 @@
 #ifndef FFEXECUTE_HPP
 #define FFEXECUTE_HPP
 
-#include <cstdio>
 #include <string>
-#include <ctime>
-#include <fstream>
 #include <filesystem>
 
-#include "FFTester.hpp"
-#include "OtherError.hpp"
-#include "ChangeFileDate.hpp"
-#include "TestPipe.hpp"
 #include "enums/SkipAction.hpp"
-#include "WinConsoleHandler.hpp"
-#include "HandlePipeOutput.hpp"
-#include "BetterConversion.hpp"
-// #include "TemporaryRename.hpp"
 
 namespace fs = std::filesystem;
 

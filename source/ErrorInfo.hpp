@@ -1,11 +1,8 @@
-#ifndef OTHER_ERROR_HPP
-#define OTHER_ERROR_HPP
+#ifndef ERROR_INFO_HPP
+#define ERROR_INFO_HPP
 
-#include <cstdio>
 #include <string>
 #include <vector>
-
-#include "BetterConversion.hpp"
 
 typedef std::string str;
 typedef const std::string &cstr;
@@ -19,9 +16,9 @@ typedef const std::vector<wstr> &cvwstr;
 #define COLOR_WHITE   "\033[37m"
 #define COLOR_GREEN   "\033[32m"
 
-#define ADD_OTHER_ERROR(x) OtherError::addError(x, __PRETTY_FUNCTION__)
+#define ADD_ERROR_INFO(x) ErrorInfo::addError(x, __PRETTY_FUNCTION__)
 
-class OtherError
+class ErrorInfo
 {
     static vwstr m_errors;
 public:
@@ -30,4 +27,4 @@ public:
     static cvwstr getErrors();
 };
 
-#endif // OTHER_ERROR_HPP
+#endif // ERROR_INFO_HPP

@@ -1,4 +1,9 @@
 #include "FFTester.hpp"
+
+#include <cstdio>
+#include <string>
+#include <filesystem>
+
 const str FFTester::Patterns::durationPrefix = "Duration: ";
 const int FFTester::Patterns::strtimeTextSize = 11;
 const str FFTester::Patterns::videoPrefix = "Video: ";

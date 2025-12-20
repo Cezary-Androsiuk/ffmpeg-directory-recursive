@@ -1,10 +1,8 @@
 #ifndef TEST_PIPE_HPP
 #define TEST_PIPE_HPP
 
-#include <cstdio>
 #include <string>
 #include <filesystem>
-#include <iostream>
 
 // ,,Since a Microsoft compiler is used, an underscore is needed at the beginning''
 // https://stackoverflow.com/questions/38876218/execute-a-command-and-get-output-popen-and-pclose-undefined

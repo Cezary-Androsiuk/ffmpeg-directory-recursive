@@ -1,7 +1,8 @@
 #include "BetterConversion.hpp"
 
+#include <string>
 
-std::wstring toWideString(const std::string &string)
+std::wstring BetterConversion::toWideString(const std::string &string)
 {
     std::wstring wstring;
     for(char c : string)
@@ -9,7 +10,7 @@ std::wstring toWideString(const std::string &string)
     return wstring;
 }
 
-std::string toString(const std::wstring &wstring)
+std::string BetterConversion::toString(const std::wstring &wstring)
 {
     std::string string;
     for(wchar_t wc : wstring)

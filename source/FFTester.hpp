@@ -1,7 +1,6 @@
 #ifndef FFTESTER_HPP
 #define FFTESTER_HPP
 
-#include <cstdio>
 #include <string>
 #include <filesystem>
 // #include <sstream> // for getInterpretationOfTime

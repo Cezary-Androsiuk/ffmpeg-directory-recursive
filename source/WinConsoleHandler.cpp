@@ -1,5 +1,8 @@
 #include "WinConsoleHandler.hpp"
 
+#include <cstdio>
+#include <windows.h>
+
 bool WinConsoleHandler::m_combinationCtrlCPressed = false;
 
 bool WinConsoleHandler::installConsoleHandler()

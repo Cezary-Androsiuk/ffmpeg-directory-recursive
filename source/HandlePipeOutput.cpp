@@ -1,5 +1,19 @@
 #include "HandlePipeOutput.hpp"
 
+#include <cstdio>
+#include <string>
+#include <sstream> // for getInterpretationOfTime
+#include <fstream>
+#include <filesystem>
+#include <vector>
+#include <chrono>
+#include <random>
+#include <queue> // for splitSpamLine
+#include <cctype> // for cleanFFOFile
+
+#include "ErrorInfo.hpp"
+#include "BetterConversion.hpp"
+
 std::string HandlePipeOutput::m_stringDuration;
 std::ofstream HandlePipeOutput::m_ffOFile;
 fs::path HandlePipeOutput::m_ffOFileDirectory;
@@ -145,7 +159,7 @@ void HandlePipeOutput::addTextToFFOFile(cstr line)
         if(!m_lastFFOFileWriteFailed) // if last failed, then do not add multiple errors (spam protection)
         {
             printf(COLOR_RED "FFOFile was not oppened yet!\n" COLOR_RESET);
-            OtherError::addError(L"FFOFile was not oppened while trying to write", __PRETTY_FUNCTION__);
+            ErrorInfo::addError(L"FFOFile was not oppened while trying to write", __PRETTY_FUNCTION__);
         }
         return;
     }
@@ -154,7 +168,7 @@ void HandlePipeOutput::addTextToFFOFile(cstr line)
     {
         if(!m_lastFFOFileWriteFailed) // if last failed, then do not add multiple errors (spam protection)
         {
-            OtherError::addError(L"FFOFile failed to write", __PRETTY_FUNCTION__);
+            ErrorInfo::addError(L"FFOFile failed to write", __PRETTY_FUNCTION__);
         }
         m_lastFFOFileWriteFailed = true;
     }
@@ -352,7 +366,7 @@ void HandlePipeOutput::cleanFFOFile()
     if(m_ffOFileIsOpen)
     {
         fprintf(stderr, "FFOFile is in use, first close this file to clean it\n");
-        OtherError::addError(L"FFOFile is in use, first close this file to clean it", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"FFOFile is in use, first close this file to clean it", __PRETTY_FUNCTION__);
         return;
     }
 
@@ -363,14 +377,14 @@ void HandlePipeOutput::cleanFFOFile()
     if(!ifile.good())
     {
         fprintf(stderr, COLOR_RED "error while oppening FFOFile" COLOR_RESET "! Can't clean it\n");
-        OtherError::addError(L"error while oppening FFOFile! Can't clean it", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"error while oppening FFOFile! Can't clean it", __PRETTY_FUNCTION__);
         return;
     }
     std::wofstream ofile(tempFFOfile);
     if(!ofile.good())
     {
         fprintf(stderr, COLOR_RED "error while oppening tempFFOfile" COLOR_RESET "! Can't clean it\n");
-        OtherError::addError(L"error while oppening tempFFOfile! Can't clean it", __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"error while oppening tempFFOfile! Can't clean it", __PRETTY_FUNCTION__);
         return;
     }
 
@@ -392,7 +406,7 @@ void HandlePipeOutput::cleanFFOFile()
     {
         fprintf(stderr, "Error while renaming tempFFOfile(%ls) to m_ffOFilePath(%ls) : %s\n",
             tempFFOfile.wstring().c_str(), m_ffOFilePath.wstring().c_str(), e.what());
-        OtherError::addError(L"Error while renaming tempFFOfile to m_ffOFilePath: " + toWideString(e.what()), __PRETTY_FUNCTION__);
+        ErrorInfo::addError(L"Error while renaming tempFFOfile to m_ffOFilePath: " + BetterConversion::toWideString(e.what()), __PRETTY_FUNCTION__);
         return;
     }
     // printf("FFOFile cleaned successfully!\n");

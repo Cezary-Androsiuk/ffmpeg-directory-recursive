@@ -1,14 +1,20 @@
-#include "OtherError.hpp"
+#include "ErrorInfo.hpp"
 
-vwstr OtherError::m_errors;
+#include <cstdio>
+#include <string>
+#include <vector>
 
-void OtherError::addError(cwstr errorDesc, cstr from)
+#include "BetterConversion.hpp"
+
+vwstr ErrorInfo::m_errors;
+
+void ErrorInfo::addError(cwstr errorDesc, cstr from)
 {
-    wstr error = errorDesc + L", from: " + toWideString(from);
+    wstr error = errorDesc + L", from: " + BetterConversion::toWideString(from);
     m_errors.push_back(error);
 }
 
-void OtherError::printErrors()
+void ErrorInfo::printErrors()
 {
     if(m_errors.empty())
     {
@@ -25,7 +31,7 @@ void OtherError::printErrors()
     }
 }
 
-cvwstr OtherError::getErrors()
+cvwstr ErrorInfo::getErrors()
 {
     return m_errors;
 }

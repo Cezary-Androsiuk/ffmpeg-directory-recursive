@@ -1,11 +1,23 @@
-#include "MainMethods.hpp"
+#include "Utils.hpp"
 
+#include <cstdio>
+#include <string>
+#include <vector>
+#include <filesystem>
+#include <algorithm> // stringTolower
+#include <cctype> // stringTolower
+
+#include <unistd.h>
+#include <fcntl.h>
+
+#include "enums/SkipAction.hpp"
+#include "BetterConversion.hpp"
 #include "FFmpegCommand.hpp"
 
 wstr lastError;
 const char possibleSeparators[] = {',', '/', '\\', /*'|', */';', '+', '?'};
 
-vstr splitStringByChar(cstr str, char separator) 
+vstr Utils::splitStringByChar(cstr str, char separator) 
 {
     // by Gemini
     vstr splited;
@@ -23,7 +35,7 @@ vstr splitStringByChar(cstr str, char separator)
     return splited;
 }
 
-vstr splitExtensionsInput(str input)
+vstr Utils::splitExtensionsInput(str input)
 {
     char usedSeparator;
     for(int i=0; i<sizeof(possibleSeparators); i++)
@@ -38,13 +50,13 @@ vstr splitExtensionsInput(str input)
     return splitStringByChar(input, usedSeparator);
 }
 
-void stringTolower(str &string)
+void Utils::stringTolower(str &string)
 {
     std::transform(string.begin(), string.end(), string.begin(), 
         [](unsigned char c){ return std::tolower(c); });
 }
 
-SkipAction handleInputSkipAction(str input)
+SkipAction Utils::handleInputSkipAction(str input)
 {
     stringTolower(input);
     
@@ -58,7 +70,7 @@ SkipAction handleInputSkipAction(str input)
     return SkipAction::None;
 }
 
-bool handleArgs(int argc, const char **argv, void *arguments[])
+bool Utils::handleArgs(int argc, const char **argv, void *arguments[])
 {
     // very dangerous function... but, i kinda like this risk ;)
     
@@ -109,7 +121,7 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
     return exitValue;
 }
 
-bool argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
+bool Utils::argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
 {
     FUNC_START
     if(argc < 3)
@@ -144,14 +156,14 @@ bool argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr
     if(givenSkipAction == SkipAction::None)
     {
         // don't use default to not force user to stop algorithm (for example if he spell type wrong)
-        lastError = L"Given argument '" + toWideString( argv[3] ) + L"' not match possible options!";
+        lastError = L"Given argument '" + BetterConversion::toWideString( argv[3] ) + L"' not match possible options!";
         return false;
     }
 
 
     if(argc >= 5)
     {
-        FFmpegCommand::setCore( toWideString(argv[4]) );
+        FFmpegCommand::setCore( BetterConversion::toWideString(argv[4]) );
     }
     
     if(directory != nullptr)
@@ -166,7 +178,7 @@ bool argsValidFixed(int argc, const char **argv, fs::path *const directory, vstr
     return true;
 }
 
-bool argsValidDynamic(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
+bool Utils::argsValidDynamic(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction)
 {
     FUNC_START
 
@@ -217,7 +229,7 @@ bool argsValidDynamic(int argc, const char **argv, fs::path *const directory, vs
     if(givenSkipAction == SkipAction::None)
     {
         // don't use default to not force user to stop algorithm (for example if he spell type wrong)
-        lastError = L"Given argument '" + toWideString( argv[3] ) + L"' not match possible options!";
+        lastError = L"Given argument '" + BetterConversion::toWideString( argv[3] ) + L"' not match possible options!";
         return false;
     }
 
@@ -233,7 +245,7 @@ bool argsValidDynamic(int argc, const char **argv, fs::path *const directory, vs
     return true;
 }
 
-bool isDirectoryEmpty(fs::path directory)
+bool Utils::isDirectoryEmpty(fs::path directory)
 {
     // should be an directory at this point, then no checking
 
@@ -248,7 +260,7 @@ bool isDirectoryEmpty(fs::path directory)
     return true;
 }
 
-bool createDirectoryIfValid(fs::path outDirectory)
+bool Utils::createDirectoryIfValid(fs::path outDirectory)
 {
     FUNC_START
 
@@ -284,7 +296,7 @@ bool createDirectoryIfValid(fs::path outDirectory)
     return true;
 }
 
-bool copyStructureOfFolders(fs::path sourceDir, fs::path targetDir)
+bool Utils::copyStructureOfFolders(fs::path sourceDir, fs::path targetDir)
 {
     FUNC_START
 
@@ -317,7 +329,7 @@ bool copyStructureOfFolders(fs::path sourceDir, fs::path targetDir)
         }
         catch(std::filesystem::filesystem_error &e)
         {
-            lastError = L"Error while creating directory: " + directoryToCreate.wstring() + L"! Error: " + toWideString(e.what());
+            lastError = L"Error while creating directory: " + directoryToCreate.wstring() + L"! Error: " + BetterConversion::toWideString(e.what());
             return false;
         }
     }
@@ -327,7 +339,7 @@ bool copyStructureOfFolders(fs::path sourceDir, fs::path targetDir)
     return true;
 }
 
-fs::path createOutputDirectory(cpath inputDirectory, bool removeDirIfExist)
+fs::path Utils::createOutputDirectory(cpath inputDirectory, bool removeDirIfExist)
 {
     fs::path outDirectory( inputDirectory.wstring() + L"-ffmpeg-h.265" );
 
@@ -355,7 +367,7 @@ fs::path createOutputDirectory(cpath inputDirectory, bool removeDirIfExist)
     return outDirectory;
 }
 
-fs::path createOCFDirectory(cpath inputDirectory, bool removeDirIfExist) // OCFDirectory is OutputCompletedFilesDirectory
+fs::path Utils::createOCFDirectory(cpath inputDirectory, bool removeDirIfExist) // OCFDirectory is OutputCompletedFilesDirectory
 {
     fs::path OFCDirectory( inputDirectory.wstring() + L"-finished_source_files");
 
@@ -383,7 +395,7 @@ fs::path createOCFDirectory(cpath inputDirectory, bool removeDirIfExist) // OCFD
     return OFCDirectory;
 }
 
-void printStatusInfo(SkipAction skipAction)
+void Utils::printStatusInfo(SkipAction skipAction)
 {
     str output = "\n[ ";
 
@@ -416,7 +428,7 @@ void printStatusInfo(SkipAction skipAction)
     printf("%s\n", output.c_str());
 }
 
-fs::path createOutputFile(cpath inFile, cpath inDirectory, cpath outDirectory)
+fs::path Utils::createOutputFile(cpath inFile, cpath inDirectory, cpath outDirectory)
 {
     fs::path inFileWithMP4(inFile);
     inFileWithMP4.replace_extension(L"mp4");
@@ -425,13 +437,13 @@ fs::path createOutputFile(cpath inFile, cpath inDirectory, cpath outDirectory)
     // I underestimated the possibilities of filesystem lib
 }
 
-fs::path createOFCFile(cpath inFile, cpath inDirectory, cpath OFCDirectory)
+fs::path Utils::createOFCFile(cpath inFile, cpath inDirectory, cpath OFCDirectory)
 {
     fs::path relativeInFile = fs::relative(inFile, inDirectory);
     return OFCDirectory / relativeInFile;
 }
 
-void deleteDirectoryIfEmpty(fs::path outDirectory)
+void Utils::deleteDirectoryIfEmpty(fs::path outDirectory)
 {
     if(fs::exists( outDirectory ))
     {
@@ -447,7 +459,8 @@ void deleteDirectoryIfEmpty(fs::path outDirectory)
     }
 }
 
-bool rm_all(const fs::path& path) {
+bool Utils::rm_all(const fs::path& path) 
+{
     try {
         fs::remove_all(path);
         return true;

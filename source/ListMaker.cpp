@@ -1,5 +1,10 @@
 #include "ListMaker.hpp"
 
+#include <cstdio>
+#include <string>
+#include <vector>
+#include <filesystem>
+
 bool ListMaker::vectorContains(cvstr vector, cstr string)
 {
     for(const auto &s : vector)
