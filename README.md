@@ -1,49 +1,140 @@
 # FFmpegDirectoryRecursive v1.5.0
 
 ## About
-Program for multi-file compression. Could perform FFmpeg command for each file in the given directory keeping creation and modification date untouched
+**FFmpegRecursive** is a CLI tool for multi-file video compression and conversion. It automates FFmpeg execution for every file in a specified directory, recursively handling subfolders.
 
-It is a twin project to [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory), but upgraded to handle recursive directories.
-Unlike FFmpegDirectory, this algorithm creates a parallel directory that will contain an identical structure to the one specified by the user but with re-encoded files.
+**Key Features:**
+* **Recursive Processing:** Handles complex directory trees.
+* **Metadata Preservation:** Keeps original creation and modification dates intact.
+* **Non-destructive:** Creates a parallel output folder structure instead of overwriting.
+* **Smart Detection:** Can skip or handle files that are already encoded (e.g., H.265).
+
+### Purpose
+Downloaded or recorded videos often are encoded with h.264. On todays standard those videos takes unnesessary much space on the drive. In response for that you could reencode each video to h.265 using `ffmpeg -i video.mp4 -c:v libx265 -vtag hvc1 smaller_size_video.mp4`. In the end of the day you will reach the goal, but manually typing it for each video is tedious. Thats the reason this program was created, to simplify that task by calling one command `ffmpegRec video_folder mp4` to convert thousands of files that could lay in this folder.
+
+This is an advanced successor to [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory). Unlike its predecessor, this tool handles **recursive directory structures**. It creates a parallel output directory that mirrors the input structure, filling it with processed files while keeping the original files untouched.
 Check out [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory) for more screenshots!
 
-## Installation
-Requires installed FFmpeg - added to system environment variables. 
-1:
-    download ```ffmpegRec.exe``` 
-    add file's directory to ystem environment variables
-2: 
-    download project
-    create ```bin/``` folder
-    execute ```compile.bat```
-    add file's directory to ystem environment variables
+
+## Prerequisites
+* [**FFmpeg:**](https://www.ffmpeg.org/) Must be installed and added to your system's `PATH` environment variable.
+
+
+
+## Installation (Windows)
+
+### Option 1: Pre-built Binary (Recommended)
+1. Download `ffmpegRec.exe` from the releases section.
+2. Add the directory containing the `.exe` file to your system environment variables.
+
+### Option 2: Build from Source
+**Prerequisites:**
+* A MinGW compiler (e.g., MinGW-w64) installed and added to PATH.
+
+**Steps:**
+1. Clone or download this repository.
+2. Create a `build\` folder in the project root.
+3. Run `g++ source\*.cpp -o build\ffmpegRec.exe` to build the application.
+4. Add the output directory to your system environment variables.
+
+### Option 3: Build from Source (CMake)
+**Prerequisites:**
+* [CMake](https://cmake.org/download/) installed.
+* A MinGW compiler (e.g., MinGW-w64) installed and added to PATH.
+
+**Steps:**
+1. Clone or download this repository.
+2. Open a terminal in the project folder.
+3. Create a build directory and enter it:
+   ```cmd
+   mkdir build
+   cd build
+   ```
+4. Generate build files specifically for MinGW (to avoid MSVC conflicts):
+   ```cmd
+   cmake -G "MinGW Makefiles" ..
+   ```
+5. Compile the application:
+   ```cmd
+   cmake --build .
+   ```
+6. The executable will be created (check build/ or bin/). Add its directory to your system environment variables.
+
+
 
 ## Usage
+```cmd
+ffmpegRec <path> <extensions> [action] [command]
 ```
->ffmpegRec :1 :2 :3 :4
-    :1 - path to execute ffmpeg in it
-    :2 - extensions to look for, can be separated by ,/\\?;+
-    :3 - action when file is already H265 [skip/copy/move/test/force] (optional)
-         default: Force
-    :4 - ffmpeg core command (optional)
-         default: "-c:v libx265 -vtag hvc1"
-         NOTE: use brackets "" with this argument
+### Arguments
+| Argument | Description |
+| :--- | :--- |
+| **`<path>`** | The root directory containing files to process. |
+| **`<extensions>`** | File extensions to look for. Multiple extensions can be separated by `,` `/` `\` `?` `;` `+`. <br> *Example:* `mp4,mkv,avi`|
+| **`[action]`** | *(Optional)* Behavior when a file is already in the target codec (H.265). <br> **Options:** `skip`, `copy`, `move`, `test`, `force` <br> **Default:** `force` |
+| **`[command]`** | *(Optional)* The FFmpeg arguments to apply. Use quotes  around the command. <br> **Default:** `"-c:v libx265 -vtag hvc1"` |
+
+### Examples
+
+**Basic usage (convert all mp4 and mkv in `old_format/` directory to H.265):**
+
+You can provide a full path to the directory:
+```cmd
+cd %userprofile%\Videos
+ffmpegRec "old_format" mp4+mkv
 ```
 
-## Input Files:
+Or, simply run it inside the current directory using `.` (dot):
+```cmd
+cd %userprofile%\Videos\old_format
+ffmpegRec . mp4+mkv
+```
+Both commands work identically, but the second one is often faster to type if you open the terminal directly in the target folder.
+
+**Result:**
+Two new folders will be created:
+1. `old_format-ffmpeg-h.265` – containing the compressed files.
+2. `old_format-finished_source_files` – containing the original source files (moved here).
+*The second folder is for comparison and recovery purposes. If the conversion is successful, you can delete it to save space.*
+
+---
+
+**Custom FFmpeg settings (e.g., set CRF to 24):**
+
+You can adjust the compression quality by modifying the FFmpeg command.
+```cmd
+ffmpegRec . mp4 skip "-c:v libx265 -crf 24 -vtag hvc1"
+```
+The `skip` action tells the program to ignore files that are already encoded in H.265 (treating them as if they had a different extension).
+
+---
+
+**Custom FFmpeg settings (e.g., change resolution):**
+
+By changing the FFmpeg command, you can alter the program's purpose entirely, for example, to resize videos.
+```cmd
+ffmpegRec . mp4 force "-vf scale=1920:1080"
+```
+In this example, all files in the directory will be forced to scale to 1920x1080 resolution.
+
+---
+
+## Screenshots
+
+### Input Files:
 ![inFiles](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/inFiles.png "inFiles") 
 
-## Command Prompt Output
+### Command Prompt Output
 ![display1](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/display1.png "display1") 
 
-## Output Files:
+### Output Files:
 ![outFiles](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles.png "outFiles")
 
 
-## Invalid arguments
+### Invalid arguments
 ![display2](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/display2.png "display2") 
 
-## Catalog Occupied
+### Catalog Occupied
 ![display3](https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/display3.png "display3") 
 
 <!-- The algorithm is armed with many more tools to protect and facilitate file compression. As soon as I find time to do so, I will describe the operation of both algorithms. -->
