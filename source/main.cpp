@@ -3,13 +3,13 @@
 #include <vector>
 #include <filesystem>
 
-#include "cpp/OtherError.hpp"
-#include "cpp/MainMethods.hpp"
-#include "cpp/FFExecute.hpp"
-#include "cpp/ListMaker.hpp"
-#include "cpp/enums/SkipAction.hpp"
-#include "cpp/WinConsoleHandler.hpp"
-#include "cpp/FFmpegCommand.hpp"
+#include "OtherError.hpp"
+#include "MainMethods.hpp"
+#include "FFExecute.hpp"
+#include "ListMaker.hpp"
+#include "enums/SkipAction.hpp"
+#include "WinConsoleHandler.hpp"
+#include "FFmpegCommand.hpp"
 
 // locate files recursive
 
