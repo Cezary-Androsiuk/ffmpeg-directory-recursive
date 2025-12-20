@@ -21,7 +21,7 @@ While you could manually re-encode a single video to the more efficient **H.265*
 `ffmpegRec video_folder mp4`
 allowing you to batch-convert thousands of files residing in that folder and its subdirectories efficiently.
 
-## More
+### More
 This is an advanced successor to [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory). Unlike its predecessor, this tool handles **recursive directory structures**. It creates a parallel output directory that mirrors the input structure, filling it with processed files while keeping the original files untouched.
 Check out [FFmpegDirectory](https://github.com/Cezary-Androsiuk/FFmpegDirectory) for more screenshots!
 
