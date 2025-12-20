@@ -147,7 +147,7 @@ In this example, all files in the directory will be forced to scale to 1920x1080
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles1.png" width="190px" alt="outFiles 1">
+      <!-- <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles1.png" width="190px" alt="outFiles 1"> -->
     </td>
     <td align="center">
       <img src="https://github.com/Cezary-Androsiuk/FFmpegDirectoryRecursive/blob/master/images/outFiles2.png" width="290px" alt="outFiles 2">
