@@ -145,8 +145,15 @@ void HandlePipeOutput::printOutputToCMD(cstr line)
     if(timeTextPos == str::npos) // skips lines that are not "progress line"
         return;
         
-    str strtime = line.substr(timeTextPos + sizeof(timeText), strtimeTextSize);
+    // ignore N/A - it will reset counter
+    bool containsNA = line.find("out_time=N/A") != str::npos;
+    if(containsNA)
+        return; 
+    
+    str strtime = line.substr(timeTextPos + sizeof(timeText)-1, strtimeTextSize);
     int timePassed = HandlePipeOutput::getInterpretationOfTime(strtime);
+    
+    // printf("\n\n\n\n""line: %s\n" "strtime: %s\n" "time: %d\n", line.c_str(), strtime.c_str(), timePassed);
 
     HandlePipeOutput::printProgress(timePassed, m_stringDuration);
 }
