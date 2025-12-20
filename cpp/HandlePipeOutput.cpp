@@ -117,18 +117,23 @@ void HandlePipeOutput::createFFOFilePath()
 }
 
 
-
 void HandlePipeOutput::printOutputToCMD(cstr line)
 {
+    // one line pattern example:
+    // out_time=00:00:20.200000
+    // interesting part: "00:00:20.20"
+
     constexpr int strtimeTextSize = 11;
+    static constexpr const char timeText[] = "out_time=";
 
-    constexpr const char timeText[] = "kB time="; // kb are for better match
     size_t timeTextPos = line.find(timeText);
-    if(timeTextPos == str::npos)
-        return;
 
+    if(timeTextPos == str::npos) // skips lines that are not "progress line"
+        return;
+        
     str strtime = line.substr(timeTextPos + sizeof(timeText), strtimeTextSize);
     int timePassed = HandlePipeOutput::getInterpretationOfTime(strtime);
+
     HandlePipeOutput::printProgress(timePassed, m_stringDuration);
 }
 

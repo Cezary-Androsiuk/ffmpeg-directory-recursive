@@ -371,7 +371,7 @@ bool FFExecute::_ffmpegPartForStandard(cpath inFile, cpath outFile)
         return false;
     }
 
-    char buffer[128];
+    char buffer[1024];
     while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
     {
         if(WinConsoleHandler::combinationCtrlCPressed()) return false; // no exit status, all stops

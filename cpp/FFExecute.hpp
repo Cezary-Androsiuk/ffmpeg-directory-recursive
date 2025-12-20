@@ -38,9 +38,21 @@ typedef const fs::path &cpath;
 #define wpipeOpen(...) _wpopen(__VA_ARGS__)
 #define pipeClose(...) _pclose(__VA_ARGS__)
 
+/// allows to print simpler output
+#if __linux__
+#define _PROGRESS_FLAG L" -progress - "
+#elif _WIN32
+#define _PROGRESS_FLAG L" -progress pipe:1 "
+#endif
+
 #define _CMDT(text) L" \"" + (text) + L"\" " /* command text */
+
 #define FFMPEG_COMMAND(input, output) \
-    L"ffmpeg -i" _CMDT(input) L"-c:v libx265 -vtag hvc1" _CMDT(output) \
+    L"ffmpeg " \
+    L"-i" _CMDT(input) \
+    L"-c:v libx265 -vtag hvc1" \
+    _PROGRESS_FLAG \
+    _CMDT(output) \
     L"2>&1"; // move stderr to stdout (connect them)
 
 class FFExecute
