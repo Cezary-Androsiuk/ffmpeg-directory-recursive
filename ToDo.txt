@@ -18,6 +18,15 @@
 
 4. remove old flexible argument function and add new with extensions mp4+mkv+m4a+mov+avi
 
-6. fix Ctrl+C not deleting files
-
 8. separate currently compressed FFOFile output from the rest to the temporary one and after finished compression of the file, trim data from the temporary and move it to main FFOFile (main but in range of one compression)
+
+9. fix compressing FFOFile - now is even larger thanks to the new pipe handling method (-progress flag)
+
+10. add 5th argument for output directory postfix, "-ffmpeg-h.265" could be confusing when command was changed
+   - by default postfix is "-ffmpeg-h.265"
+   - if ffmpeg core was changed by user (and the 5th argument was not provided), then use postfix "-ffmpeg" 
+   - but if user is interested in other naming style, then he can specify the 5th argument
+
+11. after 100% correct ("In meantime, no other errors occured") execution check if in source directory any files are left
+   - if no (is empty or only folders) then delete it recursively
+12. decide what to do with finished source files folder and stick with it - deleting it by hand is repeatable, but leaving it for user is also good idea (he will by default move them to trash instead of hard deleting)
