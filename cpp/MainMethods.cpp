@@ -81,7 +81,7 @@ bool handleArgs(int argc, const char **argv, void *arguments[])
     exitValue = argsValidConst(argc, argv, directory, extensions, skipAction);
     if(!exitValue)
     {
-        fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %s\n" COLOR_RESET, lastError.c_str());
+        fprintf(stderr, COLOR_RESET "Arguments are not valid:" COLOR_RED " %S\n" COLOR_RESET, lastError.c_str());
         fprintf(stderr, "Expected three arguments!\n");
         printf("ffmpegRec :1 :2 :3\n");
         printf("  :1 - path to execute ffmpeg in it\n");

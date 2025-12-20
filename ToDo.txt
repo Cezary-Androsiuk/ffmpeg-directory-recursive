@@ -18,8 +18,6 @@
 
 4. remove old flexible argument function and add new with extensions mp4+mkv+m4a+mov+avi
 
-5. fix invalid agruments info text
-
 6. fix Ctrl+C not deleting files
 
 7. move FFOFile to (maybe all - not only created by current compression (in case if prevoius execution fail or something) ) ffmpeg directory
