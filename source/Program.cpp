@@ -31,7 +31,7 @@ int Program::run(int argc, const char **argv)
 
 
     printf("Selected directory: %ls\n", inDirectory.wstring().c_str());
-    printf("FFmpeg core: \"%S\"\n", FFmpegCommand::getCore());
+    printf("FFmpeg core: \"%S\"\n", FFmpegCommand::getCore()); // FFmpeg Command
 
     // create list of files
     vpath listOfFiles = ListMaker::listOfFiles(inDirectory, extensions); // listOfFiles method also prints files
@@ -60,6 +60,8 @@ int Program::run(int argc, const char **argv)
         HandlePipeOutput::setFFOFileDirectory(inDirectory);
     }
 
+    fs::path parentRelativeDirectory = inDirectory.parent_path();
+
     FFExecute::setTotalFFmpegsToPerform(listOfFiles.size());
     FFExecute::setSkipAction(skipAction);
     
@@ -76,7 +78,7 @@ int Program::run(int argc, const char **argv)
         fs::path outFile = Utils::createOutputFile(inFile, inDirectory, outDirectory);
         fs::path OFCFile = Utils::createOFCFile(inFile, inDirectory, OFCDirectory);
         
-        FFExecute::runFFmpeg(inFile, outFile, OFCFile);
+        FFExecute::runFFmpeg(inFile, outFile, OFCFile, parentRelativeDirectory);
         if(WinConsoleHandler::combinationCtrlCPressed())
         {
             printf("files loop terminated due to Ctrl+C was pressed\n");
@@ -102,10 +104,13 @@ int Program::run(int argc, const char **argv)
         double correctlyPerformedRatio = 
             static_cast<double>(correctlyPerformedFFmpegs) / static_cast<double>(listOfFiles.size());
 
+        printf(COLOR_WHITE "In directory: %S\n", inDirectory.wstring().c_str());
+
         if(correctlyPerformedRatio == 1.0)
             printf(COLOR_GREEN "Finished all FFmpegs" COLOR_RESET "!\n");
         else
-            printf(COLOR_WHITE "Finished " COLOR_RED "%g%%" COLOR_WHITE " of FFmpegs" COLOR_RESET "!\n", correctlyPerformedRatio * 100);
+            printf(COLOR_WHITE "Finished " COLOR_RED "%g%%" COLOR_WHITE " of FFmpegs" COLOR_RESET "!\n", 
+                correctlyPerformedRatio * 100);
     }
     else
     {

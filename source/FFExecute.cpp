@@ -17,6 +17,7 @@
 // #include "TemporaryRename.hpp"
 #include "FFmpegCommand.hpp"
 #include "CalculatorETA.hpp"
+#include "Utils.hpp"
 
 int FFExecute::m_performedFFmpegs = 0;
 int FFExecute::m_correctlyPerformedFFmpegs = 0;
@@ -233,20 +234,25 @@ void FFExecute::runFFmpegTest(cpath inFile)
     HandlePipeOutput::addToFFOFile("Status " + FFExecute::makeFileProgressPostfix(false));
 }
 
-void FFExecute::runFFmpegStandard(cpath inFile, fs::path outFile, cpath moveFile)
+void FFExecute::runFFmpegStandard(cpath inFile, fs::path outFile, cpath moveFile, cpath parentRelativeDirectory)
 {
-    printf("  Starting new FFmpeg\n");          
-    HandlePipeOutput::addToFFOFile("Starting new FFmpeg\n");
+    printf("  ==========================  Starting new FFmpeg ==========================\n");          
+    HandlePipeOutput::addToFFOFile("========================== Starting new FFmpeg ==========================\n");
 
     // check if out file exist (case when in input dir are exist files 1.mp4 and 1.mkv)
     outFile = FFExecute::changeOutputFileNameIfNeeded(outFile);
 
-    printf("    in:   %s\n", inFile.string().c_str());
-    printf("    out:  %s\n", outFile.string().c_str());
-    printf("    move: %s\n", moveFile.string().c_str());
-    HandlePipeOutput::addToFFOFile("in:   " + inFile.string() + "\n");
-    HandlePipeOutput::addToFFOFile("out:  " + outFile.string() + "\n");
-    HandlePipeOutput::addToFFOFile("move: " + moveFile.string() + "\n");
+    str in, out, move;
+    in = Utils::relativePath(inFile, parentRelativeDirectory);
+    out = Utils::relativePath(outFile, parentRelativeDirectory);
+    move = Utils::relativePath(moveFile, parentRelativeDirectory);
+
+    printf("    in:   %s\n", in.c_str());
+    printf("    out:  %s\n", out.c_str());
+    printf("    move: %s\n", move.c_str());
+    HandlePipeOutput::addToFFOFile("in:   " + in + "\n");
+    HandlePipeOutput::addToFFOFile("out:  " + out + "\n");
+    HandlePipeOutput::addToFFOFile("move: " + move + "\n");
 
     do{ // independent block of code
         
@@ -342,7 +348,7 @@ bool FFExecute::_ffprobePartForStandard(cpath inFile, cpath outFile)
         {
             if(m_skipAction == SkipAction::Force)
             {
-                fprintf(stderr, "    Error occur while executing FFTester: %s\n", 
+                fprintf(stderr, "    Error occur while executing FFTester: %s\n\n", 
                     FFTester::getErrorInfo().c_str());
                 HandlePipeOutput::addToFFOFile("Error occur while executing FFTester: " + 
                     FFTester::getErrorInfo() + "\n");
@@ -350,7 +356,7 @@ bool FFExecute::_ffprobePartForStandard(cpath inFile, cpath outFile)
             else
             {
                 fprintf(stderr, "    Error occur while executing FFTester, unable to check"
-                    " if file is H265: %s\n", FFTester::getErrorInfo().c_str());
+                    " if file is H265: %s\n\n", FFTester::getErrorInfo().c_str());
                 HandlePipeOutput::addToFFOFile("Error occur while checking if file "
                     "is H265: " + FFTester::getErrorInfo() + "\n");
             }
@@ -479,7 +485,7 @@ void FFExecute::setSkipAction(SkipAction skipAction)
     m_skipAction = skipAction;
 }
 
-void FFExecute::runFFmpeg(cpath inFile, cpath outFile, cpath moveFile)
+void FFExecute::runFFmpeg(cpath inFile, cpath outFile, cpath moveFile, cpath parentRelativeDirectory)
 {
     HandlePipeOutput::openFFOFile();
 
@@ -487,7 +493,7 @@ void FFExecute::runFFmpeg(cpath inFile, cpath outFile, cpath moveFile)
         if(m_skipAction == SkipAction::Test)
             FFExecute::runFFmpegTest(inFile);
         else
-            FFExecute::runFFmpegStandard(inFile, outFile, moveFile);
+            FFExecute::runFFmpegStandard(inFile, outFile, moveFile, parentRelativeDirectory);
 
         HandlePipeOutput::addToFFOFile(
             "\n-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "

@@ -41,7 +41,7 @@ class FFExecute
     static void moveCorrectlyFinishedFile(cpath from, cpath to);
     
     static void runFFmpegTest(cpath inFile);
-    static void runFFmpegStandard(cpath inFile, fs::path outFile, cpath moveFile);
+    static void runFFmpegStandard(cpath inFile, fs::path outFile, cpath moveFile, cpath parentRelativeDirectory);
     
     static bool _existCase(cpath inFile);
     static bool _testPipePart(cpath inFile);
@@ -54,7 +54,7 @@ public:
     static str makeFileProgressPostfix(bool addColors = true);
     static void setTotalFFmpegsToPerform(int count);
     static void setSkipAction(SkipAction skipAction);
-    static void runFFmpeg(cpath inFile, cpath outFile, cpath moveFile);
+    static void runFFmpeg(cpath inFile, cpath outFile, cpath moveFile, cpath parentRelativeDirectory);
     static int getLastExecuteStatus();
     static int getCorrectlyPerformedFFmpegs();
 

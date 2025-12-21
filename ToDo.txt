@@ -1,6 +1,3 @@
-1. change in, out and move paths displayed in command prompt and in FFOFile to relative with inDirectory (add setter for inDirectory to FFExecute)
- - add inDirectory to FFOFile
- - at the end add info about inDirectory example: "Finished all FFmpegs in [inDirectory]!"
 
 2. add possibility to run ffmpegRec while ffmpeg and source files directories already exist
  - analyze content of the directories

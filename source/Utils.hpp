@@ -41,6 +41,7 @@ public:
     static SkipAction handleInputSkipAction(str input);
     static bool handleArgs(int argc, const char **argv, void *arguments[]);
     static bool argsValid(int argc, const char **argv, fs::path *const directory, vstr *const extensions, SkipAction *const skipAction);
+    static str relativePath(cpath filePath, cpath path);
     
     static bool isDirectoryEmpty(fs::path directory);
     static bool createDirectoryIfValid(fs::path outDirectory);

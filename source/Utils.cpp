@@ -164,6 +164,29 @@ bool Utils::argsValid(int argc, const char **argv, fs::path *const directory, vs
     return true;
 }
 
+str Utils::relativePath(cpath filePath, cpath path)
+{
+    str file_str = filePath.string();
+    str path_str = path.string();
+
+    // printf("file: %s\npath: %s\n", file_str.c_str(), path_str.c_str());
+
+    size_t prefix_pos = file_str.find(path_str);
+
+    // prefix not found, just use filePath - but it will not be relative
+    if(prefix_pos == str::npos)
+    {
+        return file_str;
+    }
+
+    str relative = "." + file_str.substr(prefix_pos + path_str.size());
+    // str relative = file_str.substr(prefix_pos + path_str.size()+1); // alternative without prefix "./"
+    
+    // printf("result: %s\n", relative.c_str());
+
+    return relative;
+}
+
 
 bool Utils::isDirectoryEmpty(fs::path directory)
 {
