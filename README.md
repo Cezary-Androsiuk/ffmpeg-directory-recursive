@@ -13,7 +13,7 @@
 Downloaded and recorded videos are often encoded in **H.264**. By modern standards, these files consume significantly more disk space than necessary.
 
 While you could manually re-encode a single video to the more efficient **H.265** format using:
-`ffmpeg -i video.mp4 -c:v libx265 -vtag hvc1 smaller_size_video.mp4`
+`ffmpeg -i video.mp4 -c:v libx265 -vtag hvc1 -c:a copy smaller_size_video.mp4`
 
 ...doing this one by one is tedious and time-consuming.
 
@@ -82,7 +82,7 @@ ffmpegRec <path> <extensions> [action] [command]
 | **`<path>`** | The root directory containing files to process. |
 | **`<extensions>`** | File extensions to look for. Multiple extensions can be separated by `,` `/` `\` `?` `;` `+`. <br> *Example:* `mp4,mkv,avi`|
 | **`[action]`** | *(Optional)* Behavior when a file is already in the target codec (H.265). <br> **Options:** `skip`, `copy`, `move`, `test`, `force` <br> **Default:** `force` |
-| **`[command]`** | *(Optional)* The FFmpeg arguments to apply. Use quotes  around the command. <br> **Default:** `"-c:v libx265 -vtag hvc1"` |
+| **`[command]`** | *(Optional)* The FFmpeg arguments to apply. Use quotes  around the command. <br> **Default:** `"-c:v libx265 -vtag hvc1 -c:a copy"` |
 
 ### Examples
 
