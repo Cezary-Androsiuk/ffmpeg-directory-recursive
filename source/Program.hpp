@@ -3,7 +3,7 @@
 
 #define IN_DEBUG false
 
-#define VERSION "1.5.8"
+#define VERSION "1.5.9"
 static const char *versionLine = "FFmpegRec version " VERSION "\n";
 
 class Program{

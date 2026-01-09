@@ -7,7 +7,7 @@
 #define _CMDT(text) L"\"" + (text) + L"\" " /* command text */
 
 #define _FFMPEG_COMMAND_PREFIX L"ffmpeg -i "
-#define _FFMPEG_COMMAND_DEFAULT_CORE L"-c:v libx265 -vtag hvc1 -c:a copy"
+#define _FFMPEG_COMMAND_DEFAULT_CORE L"-c:v libx265 -vtag hvc1 -crf 26 -preset medium -c:a copy" // -tune animation is an interesting option
 
 /// allows to print simpler output - usefull while reading ffmpeg pipe
 #if __linux__
